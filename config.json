@@ -1,9 +1,9 @@
 {
-    "nClientes": "5",             
+    "nClientes": 5,             
     "filaMax": -1,              
     "tecDist": "deterministico",
     "tec": 5,                   
     "tsDist":  "deterministico",
-    "ts": 5                     
+    "ts": 5                    
 }
 
