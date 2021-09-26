@@ -1,25 +1,13 @@
 import json
-from validaEntrada import jsonValido
-import geradores
-
-def instanciaGerador(gerTipo, param):
-    if gerTipo == "deterministico":
-        return geradores.GeradorDeterministico(param)
-    
-    raise Exception("Gerador inválido")
-
+from Simulacao import simulador
 
 def main():
-    with open("config.json", "r") as configArq:
-        configJson = json.load(configArq)
+    with open("config/parametros-simulacao.json", "r") as arqConfig:
+        paramSimulacao = json.load(arqConfig)
     
-    if not jsonValido(configJson):
-        return False
-
-    geradorTec = instanciaGerador(configJson["tecDist"], configJson["tec"])
-    geradorTs = instanciaGerador(configJson["tsDist"], configJson["ts"])
-
-
-
+    # ** unpack operator https://www.geeksforgeeks.org/packing-and-unpacking-arguments-in-python/
+    simulador(**paramSimulacao)
+    
 if __name__ == "__main__":
     main()
+

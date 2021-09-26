@@ -1,0 +1,14 @@
+{
+    "nClientes": 5,             
+    "filaMax": -1,               
+    "tecDist": "uniforme",
+    "tecArgs": {
+        "min": 0,
+        "max": 1
+    },                   
+    "tsDist":  "deterministica",
+    "tsArgs": {
+        "valor": 5
+    }                  
+}
+
