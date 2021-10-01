@@ -30,8 +30,9 @@ def Imprime():
     for id in range(len(saidas)):
         tec = chegadas[id] if(id==0) else chegadas[id]-chegadas[id-1]
         tmp_ocioso = chegadas[id] if(id==0) else max(0, chegadas[id]-saidas[id-1])
-
-        a = [id+1, tec, chegadas[id], ts[id], saidas[id]-ts[id], saidas[id], (saidas[id]-ts[id])-chegadas[id], saidas[id]-chegadas[id], tmp_ocioso]
+        tf = (saidas[id]-ts[id])-chegadas[id]
+        tf = tf if(abs(tf)>1e-5) else 0
+        a = [id+1, tec, chegadas[id], ts[id], saidas[id]-ts[id], saidas[id], tf, saidas[id]-chegadas[id], tmp_ocioso]
         est.append(a)
 
     print(tabulate(est, cabecalho))

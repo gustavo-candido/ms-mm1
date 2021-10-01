@@ -1,14 +1,15 @@
 {
-    "nClientes": 5,             
+    "nClientes": 15,             
     "filaMax": -1,               
-    "tecDist": "normal",
+    "tecDist": "uniforme",
     "tecArgs": {
-        "desvio": 0.4,
-        "media": 0.5
+        "min": 2,
+        "max": 9
     },                   
-    "tsDist":  "deterministica",
+    "tsDist":  "uniforme",
     "tsArgs": {
-        "valor": 5
+        "min": 2,
+        "max": 9
     }                  
 }
 

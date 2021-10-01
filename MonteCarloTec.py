@@ -12,6 +12,7 @@ vetor_classes = []
 max_d = []
 
 def Definicao(dados):
+
     vetor_classes.clear()
     dados.sort()
     tam = len(dados)
@@ -28,6 +29,8 @@ def Definicao(dados):
         a.mini = lim-tamanho_classe
         a.quant = 0
         a.media = (a.mini+a.maxi)/2
+        a.media = (int) (a.media*100)
+        a.media = a.media/100
 
         vetor_classes.append(a)
         if(lim>=maximo): break
