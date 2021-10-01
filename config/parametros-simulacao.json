@@ -1,10 +1,10 @@
 {
     "nClientes": 5,             
     "filaMax": -1,               
-    "tecDist": "uniforme",
+    "tecDist": "normal",
     "tecArgs": {
-        "min": 0,
-        "max": 1
+        "desvio": 0.4,
+        "media": 0.5
     },                   
     "tsDist":  "deterministica",
     "tsArgs": {

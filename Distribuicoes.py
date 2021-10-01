@@ -40,6 +40,7 @@ def exponencial(lamb: float) -> float:
 def distribuicao(nomeDist:str): 
     mapaNomeParaFunc = {
         "deterministica": deterministica,
+        "exponencial": exponencial,
         "normal": normal,
         "uniforme": uniforme,
     }
