@@ -54,6 +54,6 @@ def Aplicacao(num):
     if len(vetor_classes)==0:
         print("É preciso definir os dados do Monte Carlo antes!")
         return
-    
+    # print("num = {}".format(num))
     idx = bisect.bisect_left(max_d, num)
     return vetor_classes[idx].media

@@ -1,4 +1,4 @@
 import random
 
 def nAleatorio() -> float:
-    return random.random()
+    return abs(random.random())
