@@ -1,23 +1,47 @@
 import json
 from Simulacao import simulador
-import MonteCarloTec
-import MonteCarloTs
 from Estatisticas import Imprime
-from Gera_Dados import gera_tec, gera_ts
+
+
+from Simulacao import executaSimulacao
+
+tec = [15, 12, 10, 10, 12, 15, 10, 12, 10, 10, 10, 12, 15, 12, 12]
+ts = [11,10,9,10,9,10,11,9,11,10,11,9,10,9,11]
+
+def nextTec():
+    if len(tec) == 0:
+        return 99999999999
+    ans = tec[0]
+    tec.pop(0)
+    return ans
+
+def nextTs():
+    if len(ts) == 0:
+        return 0
+    ans = ts[0]
+    ts.pop(0)
+    return ans
+
+def faker():
+    executaSimulacao(
+    nClientes=15,
+    filaMax=15,
+    proximoTec=nextTec, # ()->float
+    proximoTs=nextTs
+    )
+
+
 
 def main():
     with open("config/parametros-simulacao.json", "r") as arqConfig:
         paramSimulacao = json.load(arqConfig)
     
-    # ** unpack operator https://www.geeksforgeeks.org/packing-and-unpacking-arguments-in-python/
+        if "filaMax" in paramSimulacao and  paramSimulacao["filaMax"] == "inf":
+            paramSimulacao["filaMax"] = paramSimulacao["nClientes"]
 
-    dados_tec = gera_tec(**paramSimulacao)
-    dados_ts = gera_ts(**paramSimulacao)
-    MonteCarloTec.Definicao(dados_tec)
-    MonteCarloTs.Definicao(dados_ts)
     simulador(**paramSimulacao)
-    Imprime()
     
     
 if __name__ == "__main__":
     main()
+    # faker()

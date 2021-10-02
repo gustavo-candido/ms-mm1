@@ -1,9 +1,9 @@
+from estatisticas import Estatisticas
+from monteCarlo import MonteCarlo
 from math import inf
 from Distribuicoes import distribuicao
-import MonteCarloTec
-import MonteCarloTs
 from NumeroAleatorio import nAleatorio
-import Estatisticas
+from Gera_Dados import geraTempo
 
 def simulador(
     nClientes: int,
@@ -13,11 +13,24 @@ def simulador(
     tsDist: str,
     tsArgs 
 ) -> None:
+    if tecDist!='deterministica':
+        dados_tec = geraTempo(tecDist, tecArgs)
+        monteCarloTec = MonteCarlo(dados_tec)
+        monteCarloTec.geraClasses()
+    
+    if tsDist!='deterministica':
+        dados_ts = geraTempo(tsDist, tsArgs)
+        monteCarloTs = MonteCarlo(dados_ts)
+        monteCarloTs.geraClasses()
+
+
+
+
     return executaSimulacao(
         nClientes=nClientes,
         filaMax=filaMax,
-        proximoTec=lambda: distribuicao(tecDist)(**tecArgs),
-        proximoTs=lambda: distribuicao(tsDist)(**tsArgs),
+        proximoTec=lambda: distribuicao('deterministica')(**tecArgs) if(tecDist=='deterministica') else monteCarloTec.geraNumero(),
+        proximoTs=lambda: distribuicao('deterministica')(**tsArgs) if(tsDist=='deterministica') else monteCarloTs.geraNumero(),
     )
 
 def executaSimulacao(
@@ -33,48 +46,47 @@ def executaSimulacao(
     hc = 0 # hora do próximo evento de chegada
     hs = 99999999999 # hora do próximo evento de saída
     tf = 0 # tamanho da fila
+    ultimo_evento_fila = 0
+    media_pessoas_fila = 0
 
-    hc = tr + MonteCarloTec.Aplicacao(nAleatorio())
-    Estatisticas.Adicionar_Chegada(hc)
+    hc = tr + proximoTec()
+    estatisticas = Estatisticas()
+    estatisticas.Adicionar_Chegada(hc)
 
     cliente = 1
     while(cliente<=nClientes):
         if(hc<hs):      # próxima chegada acontece antes de próxima saída
             tr = hc
-            if not ocupado:
-                ocupado = True
-                ts = MonteCarloTs.Aplicacao(nAleatorio())
-                Estatisticas.Adicionar_ts(ts)
-                hs = tr + ts
-                
-            else:
-                tf += 1
-            hc = tr + MonteCarloTec.Aplicacao(nAleatorio())
-            Estatisticas.Adicionar_Chegada(hc)
+            if(tf<filaMax):
+                if not ocupado:
+                    ocupado = True
+                    ts = proximoTs()
+                    estatisticas.Adicionar_ts(ts)
+                    hs = tr + ts
+                    
+                else:
+                    media_pessoas_fila += (tr-ultimo_evento_fila)*tf
+                    ultimo_evento_fila = tr
+                    tf += 1
+            hc = tr + proximoTec()
+            estatisticas.Adicionar_Chegada(hc)
 
         else:
             tr = hs
-            Estatisticas.Adicionar_saida(hs)
+            estatisticas.Adicionar_saida(hs)
             cliente += 1
 
             if(tf>0):
                 tf -= 1
-                ts = MonteCarloTs.Aplicacao(nAleatorio())
-                Estatisticas.Adicionar_ts(ts)
+                media_pessoas_fila += (tr-ultimo_evento_fila)*tf
+                ultimo_evento_fila = tr
+                ts = proximoTs()
+                estatisticas.Adicionar_ts(ts)
                 hs = tr + ts
             else:
                 ocupado = False
                 hs = 99999999999
 
-        
-        # break
-
-
-
-    # print('simulando...')
-    # print("nClientes: " + str(nClientes) )
-    # print("filaMax: " + str(filaMax) )
-    # print("proximoTec: " + str(proximoTec()))
-    # print("proximoTec: " + str(proximoTec()))
-    # print("proximoTs: " + str(proximoTs()))
-    # print('fim')
+    estatisticas.Imprime()
+    media_pessoas_fila /= tr
+    print("Número Médio de Entidades na Fila    =  {:.2f}".format(media_pessoas_fila))
