@@ -23,9 +23,6 @@ def simulador(
         monteCarloTs = MonteCarlo(dados_ts)
         monteCarloTs.geraClasses()
 
-
-
-
     return executaSimulacao(
         nClientes=nClientes,
         filaMax=filaMax,
@@ -55,7 +52,7 @@ def executaSimulacao(
 
     cliente = 1
     while(cliente<=nClientes):
-        if(hc<hs):      # próxima chegada acontece antes de próxima saída
+        if(hc<=hs):      # próxima chegada acontece antes de próxima saída
             tr = hc
             if(tf<filaMax):
                 if not ocupado:
